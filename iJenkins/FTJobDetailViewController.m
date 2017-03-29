@@ -30,59 +30,6 @@
 - (void)loadData {
     [_job setDelegate:self];
     [_job loadDetail];
-    /*
-    if (!_job) {
-        _isDataAvailable = NO;
-        
-        _job = [[FTAPIJobDataObject alloc] init];
-        _job.name = _jobName;
-        
-        [FTAPIConnector connectWithObject:_job andOnCompleteBlock:^(id<FTAPIDataAbstractObject> dataObject, NSError *error) {
-            if (error) {
-                if (_job.response.statusCode == HTTPCode401Unauthorised || _job.response.statusCode == HTTPCode403Forbidden) {
-                    [dFTLoginAlert showLoginDialogWithLoginBlock:^(NSString *username, NSString *password) {
-                        _job = nil;
-                        [self loadData];
-                    } andCancelBlock:^{
-                        [self.navigationController popViewControllerAnimated:YES];
-                    }];
-                }
-                else if (error.code != -999) {
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:FTLangGet(@"Connection error") message:error.localizedDescription delegate:self cancelButtonTitle:FTLangGet(@"Ok") otherButtonTitles:nil];
-                    [alert show];
-                    [_refreshControl endRefreshing];
-                }
-                else {
-                    
-                }
-            }
-            else {
-                if ([FTAccountsManager sharedManager].selectedAccount.accountType == FTAccountTypeKeychain) {
-                    [[FTAccountsManager sharedManager] updateAccount:[FTAccountsManager sharedManager].selectedAccount];
-                }
-                //[_overviewCell setJobsStats:_serverObject.jobsStats];
-                if (_job.jobDetail.builds > 0) {
-                    _isDataAvailable = YES;
-                }
-                else {
-                    _isDataAvailable = NO;
-                }
-                
-                
-                [super.tableView reloadData];
-                
-                
-                [NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(createTopButtons) userInfo:nil repeats:NO];
-                [_refreshControl endRefreshing];
-            }
-        }];
-    }
-    else {
-        _isDataAvailable = YES;
-        [self.tableView reloadData];
-    }
-     */
-    
 }
 
 #pragma mark Creating elements

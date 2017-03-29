@@ -16,7 +16,8 @@
 #import "GCNetworkReachability.h"
 #import "BonjourBuddy.h"
 #import "NSData+Networking.h"
-
+#import "UIImage+FontAwesome.h"
+#import "NSString+FontAwesome.h"
 
 @interface FTAccountsViewController () <FTAccountCellDelegate>
 
@@ -56,7 +57,9 @@
 #pragma mark Data
 
 - (void)reloadData {
+    
     [super.tableView reloadData];
+    
 }
 
 - (NSArray *)datasourceForIndexPath:(NSIndexPath *)indexPath {
@@ -91,34 +94,16 @@
     
     [super createTableView];
     [self.tableView registerForReloadDataOnTranslationChange];
+    
 }
 
 - (void)createTopButtons {
     UIBarButtonItem *add = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(didCLickAddItem:)];
-    [self.navigationItem setLeftBarButtonItem:add];
-    
-    UIBarButtonItem *edit = [[UIBarButtonItem alloc] initWithTitle:FTLangGet(@"Edit") style:UIBarButtonItemStylePlain target:self action:@selector(didCLickEditItem:)];
-    [edit registerTitleWithTranslationKey:@"Edit"];
-    [self.navigationItem setRightBarButtonItem:edit];
+    [self.navigationItem setRightBarButtonItem:add];
 }
 
 - (void)createBottomToolbar {
-    CGRect r = self.view.frame;
-    r.origin.y = (r.size.height - 44);
-    r.size.height = 44;
-    _bottomToolbar = [[UIToolbar alloc] initWithFrame:r];
-    [_bottomToolbar setAutoresizingMask:UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth];
     
-    UIBarButtonItem *space = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    UIBarButtonItem *langs = [[UIBarButtonItem alloc] initWithTitle:FTLangGet(@"Language") style:UIBarButtonItemStylePlain target:self action:@selector(changeLanguage:)];
-    [langs registerTitleWithTranslationKey:@"Language"];
-    [_bottomToolbar setItems:@[space, langs]];
-    
-    [self.view addSubview:_bottomToolbar];
-    
-    r = self.tableView.frame;
-    r.size.height -= 44;
-    [self.tableView setFrame:r];
 }
 
 - (void)createAllElements {
@@ -173,7 +158,7 @@
     [self presentViewController:nc animated:YES completion:nil];
 }
 
-- (void)didCLickEditItem:(UIBarButtonItem *)sender {
+- (void)didClickMenuItem:(UIBarButtonItem *)sender {
     [super.tableView setEditing:!super.tableView.editing animated:YES];
     
     NSString *title;
@@ -187,6 +172,7 @@
     UIBarButtonItem *edit = self.navigationItem.rightBarButtonItem;
     [edit setTitle:title];
 }
+
 
 #pragma mark Bonjour Jenkins discovery
 

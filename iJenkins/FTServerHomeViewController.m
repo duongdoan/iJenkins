@@ -304,17 +304,6 @@
 
 - (UITableViewCell *)cellForOverview {
     return nil;
-    /*
-    if (_overviewCell) return _overviewCell;
-    static NSString *identifier = @"cellForOverviewIdentifier";
-    _overviewCell = [super.tableView dequeueReusableCellWithIdentifier:identifier];
-    if (!_overviewCell) {
-        _overviewCell = [[FTAccountOverviewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier];
-    }
-    [_overviewCell setDelegate:self];
-    [_overviewCell setJobsStats:_serverObject.jobsStats];
-    return _overviewCell;
-     */
 }
 
 - (UITableViewCell *)cellForNoJob {

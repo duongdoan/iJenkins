@@ -33,5 +33,5 @@
 
 @property (nonatomic, weak) id <FTAPIJobDataObjectDelegate> delegate;
 
-
+- (void)loadDetail;
 @end

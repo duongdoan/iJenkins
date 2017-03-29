@@ -22,7 +22,9 @@
 #pragma mark Data
 
 - (void)loadDetail {
-    
+    _isLoadingDetail = NO;
+    _jobDetail = nil;
+    [self jobDetail];
 }
 
 #pragma mark Object implementation

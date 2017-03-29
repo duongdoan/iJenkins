@@ -423,6 +423,7 @@
         FTJobDetailViewController *c = [[FTJobDetailViewController alloc] init];
         [c setTitle:job.name];
         [c setJob:job];
+        [c setJobName:job.name];
         [self.navigationController pushViewController:c animated:YES];
     }
 }

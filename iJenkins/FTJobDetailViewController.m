@@ -18,12 +18,72 @@
 
 
 @interface FTJobDetailViewController ()
-
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
+@property (nonatomic) BOOL isDataAvailable;
 @end
 
 
 @implementation FTJobDetailViewController
 
+#pragma mark Data
+
+- (void)loadData {
+    [_job setDelegate:self];
+    [_job loadDetail];
+    /*
+    if (!_job) {
+        _isDataAvailable = NO;
+        
+        _job = [[FTAPIJobDataObject alloc] init];
+        _job.name = _jobName;
+        
+        [FTAPIConnector connectWithObject:_job andOnCompleteBlock:^(id<FTAPIDataAbstractObject> dataObject, NSError *error) {
+            if (error) {
+                if (_job.response.statusCode == HTTPCode401Unauthorised || _job.response.statusCode == HTTPCode403Forbidden) {
+                    [dFTLoginAlert showLoginDialogWithLoginBlock:^(NSString *username, NSString *password) {
+                        _job = nil;
+                        [self loadData];
+                    } andCancelBlock:^{
+                        [self.navigationController popViewControllerAnimated:YES];
+                    }];
+                }
+                else if (error.code != -999) {
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:FTLangGet(@"Connection error") message:error.localizedDescription delegate:self cancelButtonTitle:FTLangGet(@"Ok") otherButtonTitles:nil];
+                    [alert show];
+                    [_refreshControl endRefreshing];
+                }
+                else {
+                    
+                }
+            }
+            else {
+                if ([FTAccountsManager sharedManager].selectedAccount.accountType == FTAccountTypeKeychain) {
+                    [[FTAccountsManager sharedManager] updateAccount:[FTAccountsManager sharedManager].selectedAccount];
+                }
+                //[_overviewCell setJobsStats:_serverObject.jobsStats];
+                if (_job.jobDetail.builds > 0) {
+                    _isDataAvailable = YES;
+                }
+                else {
+                    _isDataAvailable = NO;
+                }
+                
+                
+                [super.tableView reloadData];
+                
+                
+                [NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(createTopButtons) userInfo:nil repeats:NO];
+                [_refreshControl endRefreshing];
+            }
+        }];
+    }
+    else {
+        _isDataAvailable = YES;
+        [self.tableView reloadData];
+    }
+     */
+    
+}
 
 #pragma mark Creating elements
 
@@ -37,6 +97,11 @@
     
     [self createBuildNowButton];
     [self createTableView];
+    _refreshControl = [[UIRefreshControl alloc] init];
+    [_refreshControl addTarget:self action:@selector(refreshActionCalled:) forControlEvents:UIControlEventValueChanged];
+    [self.tableView addSubview:_refreshControl];
+    [_refreshControl centerHorizontally];
+    [_refreshControl setYOrigin:-60];
 }
 
 #pragma mark Data
@@ -56,6 +121,10 @@
 }
 
 #pragma mark Actions
+
+- (void)refreshActionCalled:(UIRefreshControl *)sender {
+    [self loadData];
+}
 
 - (void)didCLickRunBuildNow:(UIBarButtonItem *)sender {
     UIActivityIndicatorView *ai = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
@@ -204,5 +273,13 @@
     }
 }
 
+#pragma mark Job data object delegate methods
+
+- (void)jobDataObject:(FTAPIJobDataObject *)object didFinishLoadingJobDetail:(FTAPIJobDetailDataObject *)detail {
+    [super.tableView reloadData];
+    
+    [_refreshControl endRefreshing];
+
+}
 
 @end

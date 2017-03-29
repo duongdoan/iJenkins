@@ -7,7 +7,6 @@
 //
 
 #import "FTAppDelegate.h"
-#import <Crashlytics/Crashlytics.h>
 #import <LUIFramework/LUIFramework.h>
 #import "FTAccountsViewController.h"
 #import "Flurry.h"
@@ -21,9 +20,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     _window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    // Crash reporting
-    [Crashlytics startWithAPIKey:@"645cad88976887e985fc9e2d08345ca9cc583918"];
-    
+        
     // Flurry analytics
     [Flurry startSession:@"JZK5H9MRXHYP86K7DJX8"];
     

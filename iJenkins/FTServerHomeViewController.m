@@ -73,7 +73,7 @@
                 if ([FTAccountsManager sharedManager].selectedAccount.accountType == FTAccountTypeKeychain) {
                     [[FTAccountsManager sharedManager] updateAccount:[FTAccountsManager sharedManager].selectedAccount];
                 }
-                [_overviewCell setJobsStats:_serverObject.jobsStats];
+                //[_overviewCell setJobsStats:_serverObject.jobsStats];
                 if (_serverObject.jobs.count > 0) {
                     _isDataAvailable = YES;
                 }
@@ -105,6 +105,8 @@
                             // No view named 'All' found, fall back to first view in the list
                             _selectedView = [_views objectAtIndex:0];
                         }
+                        _serverObject = nil;
+                        [self loadData];
                     }
                 }
                 
@@ -209,7 +211,7 @@
         if ([self isJobsSection:section]) {
             return [_jobs count];
         }
-        else return 3;
+        else return 2;
     }
     else {
         return [_searchResults count];
@@ -219,10 +221,10 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (tableView == self.tableView) {
         if (!_isDataAvailable) {
-            return (indexPath.section == 0 ? ((indexPath.row == 0) ? 218 : 54) : 54);
+            return (indexPath.section == 0 ? ((indexPath.row == 0) ? 54 : 54) : 54);
         }
         if ([self isOverviewSection:indexPath.section]) {
-            if (indexPath.row == 0) return 218;
+            if (indexPath.row == 0) return 54;
             else return 54;
         }
         else if([self isJobsSection:indexPath.section]) {
@@ -301,6 +303,8 @@
 }
 
 - (UITableViewCell *)cellForOverview {
+    return nil;
+    /*
     if (_overviewCell) return _overviewCell;
     static NSString *identifier = @"cellForOverviewIdentifier";
     _overviewCell = [super.tableView dequeueReusableCellWithIdentifier:identifier];
@@ -310,6 +314,7 @@
     [_overviewCell setDelegate:self];
     [_overviewCell setJobsStats:_serverObject.jobsStats];
     return _overviewCell;
+     */
 }
 
 - (UITableViewCell *)cellForNoJob {
@@ -328,7 +333,7 @@
     if (!cell) {
         cell = [[FTIconCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
     }
-    if (indexPath.row == 1) {
+    if (indexPath.row == 0) {
         [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
         [cell.iconView setDefaultIconIdentifier:@"icon-road"];
         [cell.textLabel setText:FTLangGet(@"Build queue")];
@@ -363,10 +368,7 @@
         if (_isDataAvailable)
         {
             if ([self isOverviewSection:indexPath.section]) {
-                if (indexPath.row == 0) return [self cellForOverview];
-                else {
-                    return [self iconCellForRowAtIndexPath:indexPath];
-                }
+                return [self iconCellForRowAtIndexPath:indexPath];
             }
             else if ([_jobs count] == 0) {
                 return [self cellForNoJob];

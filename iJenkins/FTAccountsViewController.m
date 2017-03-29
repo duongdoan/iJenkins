@@ -19,6 +19,7 @@
 #import "UIImage+FontAwesome.h"
 #import "NSString+FontAwesome.h"
 
+
 @interface FTAccountsViewController () <FTAccountCellDelegate>
 
 @property (nonatomic, strong) NSArray *data;
@@ -31,6 +32,8 @@
 @property (nonatomic, strong) NSArray *bonjourAccounts;
 
 @property (nonatomic, readonly) UIToolbar *bottomToolbar;
+
+
 
 @end
 
@@ -45,6 +48,7 @@
     if (self) {
         _reachabilityStatusCache = [NSMutableDictionary dictionary];
     }
+    
     return self;
 }
 
@@ -119,7 +123,13 @@
     [self startCheckingForJenkins];
 }
 
+
 #pragma mark View lifecycle
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -131,6 +141,7 @@
     UIMenuItem *copyUrlItem = [[UIMenuItem alloc] initWithTitle:FTLangGet(@"Copy URL") action:@selector(copyURL:)];
     UIMenuItem *openInBrowser = [[UIMenuItem alloc] initWithTitle:FTLangGet(@"Open in browser") action:@selector(openInBrowser:)];
     [[UIMenuController sharedMenuController] setMenuItems: @[copyUrlItem, openInBrowser]];
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -138,6 +149,12 @@
     
     //  Remove custom menu actions
     [[UIMenuController sharedMenuController] setMenuItems:nil];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
 }
 
 #pragma mark Actions
@@ -556,5 +573,6 @@
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     return [self accountForIndexPath:indexPath];
 }
+
 
 @end

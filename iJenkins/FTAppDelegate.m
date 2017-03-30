@@ -47,6 +47,29 @@
     UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:_viewController];
     [_window setRootViewController:nc];
     [_window makeKeyAndVisible];
+    //_thePin = @"1234";
+    _thePin = [[NSUserDefaults standardUserDefaults] stringForKey:@"pin"];
+    
+    [[ABPadLockScreenView appearance] setBackgroundColor:[UIColor colorWithHexValue:@"282B35"]];
+    
+    UIColor* color = [UIColor colorWithRed:229.0f/255.0f green:180.0f/255.0f blue:46.0f/255.0f alpha:1.0f];
+    
+    
+   
+    [[ABPadLockScreenView appearance] setLabelColor:color];
+    [[ABPadButton appearance] setBackgroundColor:[UIColor clearColor]];
+    [[ABPadButton appearance] setBorderColor:color];
+    [[ABPadButton appearance] setSelectedColor:color];
+    
+    [[ABPinSelectionView appearance] setSelectedColor:color];
+    if (self.thePin)
+    {
+        [self lockApp:self];
+    }
+    else
+    {
+        [self setPin:self];
+    }
     return YES;
 }
 
@@ -63,29 +86,15 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    if (self.thePin)
+    {
+        [self lockApp:self];
+    }
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    _thePin = @"1234";
-    //_thePin = [[NSUserDefaults standardUserDefaults] stringForKey:@"pin"];
     
-    [[ABPadLockScreenView appearance] setBackgroundColor:[UIColor colorWithHexValue:@"282B35"]];
-    
-    UIColor* color = [UIColor colorWithRed:229.0f/255.0f green:180.0f/255.0f blue:46.0f/255.0f alpha:1.0f];
-    
-    [[ABPadLockScreenView appearance] setLabelColor:[UIColor whiteColor]];
-    [[ABPadLockScreenView appearance] setLabelColor:[UIColor blackColor]];
-    [[ABPadButton appearance] setBackgroundColor:[UIColor clearColor]];
-    //[[ABPadButton appearance] setBorderColor:color];
-    [[ABPadButton appearance] setSelectedColor:color];
-    
-    [[ABPinSelectionView appearance] setSelectedColor:color];
-    if (self.thePin)
-    {
-        //[NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(showLock) userInfo:nil repeats:NO];
-        [self lockApp:self];
-    }
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -97,18 +106,12 @@
 #pragma mark - Button Methods
 - (IBAction)setPin:(id)sender
 {
-    ABPadLockScreenSetupViewController *lockScreen = [[ABPadLockScreenSetupViewController alloc] initWithDelegate:self complexPin:YES subtitleLabelText:@"You need a PIN to continue"];
+    ABPadLockScreenSetupViewController *lockScreen = [[ABPadLockScreenSetupViewController alloc] initWithDelegate:self complexPin:NO subtitleLabelText:@"You need a PIN to continue"];
     lockScreen.tapSoundEnabled = YES;
     lockScreen.errorVibrateEnabled = YES;
     
     lockScreen.modalPresentationStyle = UIModalPresentationFullScreen;
     lockScreen.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    
-    //	Example using an image
-    //	UIImageView* backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"wallpaper"]];
-    //	backgroundView.contentMode = UIViewContentModeScaleAspectFill;
-    //	backgroundView.clipsToBounds = YES;
-    //	[lockScreen setBackgroundView:backgroundView];
     
     [_viewController presentViewController:lockScreen animated:YES completion:nil];
 }
@@ -127,13 +130,6 @@
     
     lockScreen.modalPresentationStyle = UIModalPresentationFullScreen;
     lockScreen.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    
-    
-    //	Example using an image
-    //	UIImageView* backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"wallpaper"]];
-    //	backgroundView.contentMode = UIViewContentModeScaleAspectFill;
-    //	backgroundView.clipsToBounds = YES;
-    //	[lockScreen setBackgroundView:backgroundView];
     
     [_viewController presentViewController:lockScreen animated:YES completion:nil];
 }
@@ -173,6 +169,8 @@
 {
     [_viewController dismissViewControllerAnimated:YES completion:nil];
     self.thePin = pin;
+    [[NSUserDefaults standardUserDefaults] setObject:pin forKey:@"pin"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     NSLog(@"Pin set to pin %@", self.thePin);
 }
 
